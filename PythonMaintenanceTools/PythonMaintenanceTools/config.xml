@@ -1,50 +1,81 @@
 <config>
   <!-- 导出数据设置 -->
   <DumpInfo home="d:/mysql_dump">
-    <server  host="localhost1" username="root" password="root" port="3306">
-      <schema name="schemaname1">
-        <procedure>procedure1.sql</procedure>
-        <procedure>procedure2.sql</procedure>
-        <procedure>procedure3.sql</procedure>
+    <server  host="localhost" username="root" password="root" port="3306">
+      <schema name="schema1">
+        <procedures>
+          <procedure>procedure1</procedure>
+          <procedure>procedure2</procedure>
+          <procedure>procedure3</procedure>
+        </procedures>
+        <functions>
+          <function>function1</function>
+          <function>function2</function>
+          <function>function3</function>
+        </functions>
       </schema>
     </server>
-    <server  host="localhost2" username="root" password="root" port="3306">
-      <schema name="schemaname2">
-        <procedure>procedure1.sql</procedure>
-        <procedure>procedure2.sql</procedure>
-        <procedure>procedure3.sql</procedure>
+    <server  host="localhost" username="root" password="root" port="3306">
+      <schema name="schema1">
+        <procedures>
+          <procedure>procedure1</procedure>
+          <procedure>procedure2</procedure>
+          <procedure>procedure3</procedure>
+        </procedures>
+        <functions>
+          <function>function1</function>
+          <function>function2</function>
+          <function>function3</function>
+        </functions>
       </schema>
-      <schema name="schemaname3">
-        <procedure>procedure1.sql</procedure>
-        <procedure>procedure2.sql</procedure>
-        <procedure>procedure3.sql</procedure>
+      <schema name="schema2">
+        <procedures>
+          <procedure>procedure1</procedure>
+          <procedure>procedure2</procedure>
+          <procedure>procedure3</procedure>
+        </procedures>
+        <functions>
+          <function>function1</function>
+          <function>function2</function>
+          <function>function3</function>
+        </functions>
       </schema>
     </server>
   </DumpInfo>
 
   <!-- 导入数据设置 -->
   <ImportInfo>
-    <from>d:/mysql_dump</from>
+    <from>D:\mysql_dump\localhost\schema1\20160428_115951</from>
     <to>
-      <server  host="localhost1" username="root" password="root" port="3306">
-        <schema name="schemaname1">
-          <procedure>procedure1.sql</procedure>
-          <procedure>procedure2.sql</procedure>
-          <procedure>procedure3.sql</procedure>
+      <server  host="localhost" username="root" password="root" port="3306">
+        <schema name="schema1">
+          <procedures>
+            <procedure>procedure1</procedure>
+            <procedure>procedure2</procedure>
+            <procedure>procedure3</procedure>
+          </procedures>
+          <functions>
+            <function>function1</function>
+            <function>function2</function>
+            <function>function3</function>
+          </functions>
         </schema>
       </server>
-      <server  host="localhost2" username="root" password="root" port="3306">
-        <schema name="schemaname2">
-          <procedure>procedure1.sql</procedure>
-          <procedure>procedure2.sql</procedure>
-          <procedure>procedure3.sql</procedure>
-        </schema>
-        <schema name="schemaname3">
-          <procedure>procedure1.sql</procedure>
-          <procedure>procedure2.sql</procedure>
-          <procedure>procedure3.sql</procedure>
+      <server  host="127.0.0.1" username="root" password="root" port="3306">
+        <schema name="schema1">
+          <procedures>
+            <procedure>procedure1</procedure>
+            <procedure>procedure2</procedure>
+            <procedure>procedure3</procedure>
+          </procedures>
+          <functions>
+            <function>function1</function>
+            <function>function2</function>
+            <function>function3</function>
+          </functions>
         </schema>
       </server>
     </to>
   </ImportInfo>
+
 </config>

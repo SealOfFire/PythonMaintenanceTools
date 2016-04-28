@@ -21,7 +21,18 @@ class ConfigHandle():
 		self.tree = ET.parse('config.xml')
 		self.root = self.tree.getroot()
 
-		Logger.debug("ConfigHandle dumpInfo [start]")
+		# 读取导出数据部分设置
+		self.LoadExportInfo()
+		
+		#读取导入数据部分设置
+		self.LoadImportInfo()
+
+
+	def LoadExportInfo(self):
+		'''
+		读取导出数据部分设置
+		'''
+		Logger.info("ConfigHandle dumpInfo [start]")
 		dumpInfoNode = self.root.find('DumpInfo')
 		self.dumpInfo['home'] = dumpInfoNode.get('home')
 		self.dumpInfo['servers'] = []
@@ -32,16 +43,30 @@ class ConfigHandle():
 				, 'password':password
 				, 'port':port
 				,'schemas':{}}
-			for schema in server.findall("schema"):
-				schemaName = schema.get("name")
-				serverInfo['schemas'][schemaName] = []
-				for procedure in schema.findall("procedure"):
-					serverInfo['schemas'][schemaName].append(procedure.text)
-			self.dumpInfo['servers'].append(serverInfo)
+			for schemaNode in server.findall('schema'):
+				schemaName = schemaNode.get('name')
+				schemaInfo = {'procedures':{},'functions':{}}
+				# 存储过程配置
+				proceduresNode = schemaNode.find('procedures')
+				for procedureNode in proceduresNode.findall('procedure'):
+					schemaInfo['procedures'][procedureNode.text] = ''
+				# 函数配置
+				functionsNode = schemaNode.find('functions')
+				for functionNode in functionsNode.findall('function'):
+					schemaInfo['functions'][functionNode.text] = ''
+				# 表
+				# schema综合
+				serverInfo['schemas'][schemaName] = schemaInfo
 
-		Logger.debug("ConfigHandle dumpInfo [end]")
-		
-		Logger.debug("ConfigHandle importInfo [begin]")
+			self.dumpInfo['servers'].append(serverInfo)
+		Logger.info("ConfigHandle dumpInfo [end]")
+
+
+	def LoadImportInfo(self):
+		'''
+		读取导入数据部分设置
+		'''
+		Logger.info("ConfigHandle importInfo [begin]")
 		importInfoNode = self.root.find("ImportInfo")
 		self.ImportInfo['home'] = importInfoNode.find("from").text
 		to = importInfoNode.find("to")
@@ -53,28 +78,48 @@ class ConfigHandle():
 				, 'password':password
 				, 'port':port
 				,'schemas':{}}
-			for schema in server.findall("schema"):
-				schemaName = schema.get("name")
-				serverInfo['schemas'][schemaName] = []
-				for procedure in schema.findall("procedure"):
-					procedureName = procedure.text
-					procedureName = os.path.join(self.ImportInfo['home'],procedureName)
-					if os.path.exists(procedureName):
-						serverInfo['schemas'][schemaName].append(procedureName)
-					else:
-						portion = os.path.splitext(procedureName)
-						procedureName = portion[0] + ".sql"
-						if os.path.exists(procedureName):
-							serverInfo['schemas'][schemaName].append(procedureName)
-						else:
-							procedureName = portion[0] + ".txt"
-							if os.path.exists(procedureName):
-								serverInfo['schemas'][schemaName].append(procedureName)
-							else:
-								Logger.error("procedure not exist [%s]" % portion[0])
+			for schemaNode in server.findall("schema"):
+				schemaName = schemaNode.get("name")
+				schemaInfo = {'procedures':{},'functions':{}}
+				# serverInfo['schemas'][schemaName] = []
+				# 存储过程配置
+				proceduresNode = schemaNode.find('procedures')
+				for procedureNode in proceduresNode.findall('procedure'):
+					exists,procedureFullName = self.Exists(self.ImportInfo['home'],procedureNode.text)
+					if exists:
+						schemaInfo['procedures'][procedureNode.text] = procedureFullName
+				# 函数配置
+				functionsNode = schemaNode.find('functions')
+				for functionNode in functionsNode.findall('function'):
+					exists,functionFullName = self.Exists(self.ImportInfo['home'],functionNode.text)
+					if exists:
+						schemaInfo['functions'][functionNode.text] = functionFullName
+				# 表
+				# schema综合
+				serverInfo['schemas'][schemaName] = schemaInfo
 			self.ImportInfo['servers'].append(serverInfo)
-		Logger.info("导入[结束]")
-		Logger.debug("ConfigHandle importInfo [end]")
+		Logger.info("ConfigHandle importInfo [end]")
+
+
+	def Exists(self,home, fileName):
+		'''
+		判断文件存在
+		'''
+		fullFileName = os.path.join(home,fileName)
+		if os.path.exists(fullFileName):
+			return True,fullFileName
+		else:
+			portion = os.path.splitext(fullFileName)
+			fullFileName = portion[0] + ".sql"
+			if os.path.exists(fullFileName):
+				return True,fullFileName
+			else:
+				fullFileName = portion[0] + ".txt"
+				if os.path.exists(fullFileName):
+					return True,fullFileName
+				else:
+					Logger.error("file not exist [%s]" % portion[0])
+					return False,''
 
 
 	@classmethod

@@ -80,7 +80,7 @@ class MySqlHandle():
 
 
 	@classmethod
-	def MySQLWriteProcedureToFile(self,home,host,schema,procedure,ddl):
+	def MySQLWriteProcedureToFile(self,home,startTime,host,schema,procedure,dropType,ddl):
 		'''
 		文本写到文件上
 		'''
@@ -88,7 +88,7 @@ class MySqlHandle():
 		homeTemp = os.path.join(home,host)
 		homeTemp = os.path.join(home,host)
 		homeTemp = os.path.join(homeTemp,schema)
-		homeTemp = os.path.join(homeTemp, datetime.datetime.now().strftime('%Y%m%d_%H%M%S'))
+		homeTemp = os.path.join(homeTemp, startTime)
 		if not os.path.exists(homeTemp):
 			os.makedirs(homeTemp)
 			Logger.debug("MySQLWriteProcedureToFile 文件夹不存在,创建文件夹")
@@ -97,7 +97,7 @@ class MySqlHandle():
 		f = codecs.open(homeTemp,"w","utf-8")
 		Logger.debug("MySQLWriteProcedureToFile 打开文件[%s]" % homeTemp)
 		# ddl.decode("utf-8")
-		f.write("DROP procedure IF EXISTS `%s`;\n " % procedure,)
+		f.write("DROP %s IF EXISTS `%s`;\n " % (dropType,procedure))
 		#f.write("DELIMITER $$\n")
 		f.write(ddl)
 		f.write(';')
@@ -112,7 +112,9 @@ class MySqlHandle():
 		'''
 		导出存储过程
 		'''
+		
 		Logger.debug("DumpProcedure [begin]")
+		startTime = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
 		dumpInfo = ConfigHandle().dumpInfo
 		home = dumpInfo['home']
 		Logger.debug("DumpProcedure 导出文件保存根路径[%s]" % home)
@@ -127,17 +129,35 @@ class MySqlHandle():
 				Logger.info("connect [open]-[%s]" % server['host'])
 				cursor = cnx.cursor()
 				Logger.info("cursor [open]")
-				for schema,procedures in server['schemas'].items():
-					cnx.database = schema
-					for procedure in procedures:
-						query = ("show create procedure %s" % procedure)
-						Logger.info("export procedure [begin] [%s] [%s] [%s]" % (server['host'],schema,procedure))
+				for schemaName,schemaValue in server['schemas'].items():
+					cnx.database = schemaName
+					# 存储过程导出
+					for procedureName,procedureValue in schemaValue['procedures'].items():
+						query = ("show create procedure %s" % procedureName)
+						Logger.info("export procedure [begin] [%s] [%s] [%s]" % (server['host'],schemaName,procedureName))
+						#cursor.execute("select * from dex_dataexchangelog")
 						cursor.execute(query)
 						row = cursor.fetchone()
-						procedureDDL = row[2]
-						Logger.info("export procedure [end] [%s] [%s] [%s]" % (server['host'],schema,procedure))
-						
-						MySqlHandle.MySQLWriteProcedureToFile(home,server['host'],schema,procedure,procedureDDL)
+						if row == None:
+							Logger.error('procedure not exists')
+						else:
+							ddl = row[2]
+							MySqlHandle.MySQLWriteProcedureToFile(home,startTime,server['host'],schemaName,procedureName,'procedure',ddl)
+						Logger.info("export procedure [end] [%s] [%s] [%s]" % (server['host'],schemaName,procedureName))
+					# 函数导出
+					for functionName,functionValue in schemaValue['functions'].items():
+						query = ("show create function %s" % functionName)
+						Logger.info("export function [begin] [%s] [%s] [%s]" % (server['host'],schemaName,functionName))
+						#cursor.execute("select * from dex_dataexchangelog")
+						cursor.execute(query)
+						row = cursor.fetchone()
+						if row == None:
+							Logger.error('function not exists')
+						else:
+							ddl = row[2]
+							MySqlHandle.MySQLWriteProcedureToFile(home,startTime,server['host'],schemaName,functionName,'function',ddl)
+						Logger.info("export function [end] [%s] [%s] [%s]" % (server['host'],schemaName,functionName))
+
 				cursor.close()
 				Logger.info("cursor [close]")
 			except mysql.connector.Error as err:
@@ -165,13 +185,14 @@ class MySqlHandle():
 				Logger.debug("MySQLImportProcedure create cnx")
 				cursor = cnx.cursor()
 				Logger.info("cursor [open]")
-				for schema,procedures in server['schemas'].items():
-					cnx.database = schema
-					for procedure in procedures:
-						f = codecs.open(procedure,"r","utf-8")
+				for schemaName,schemaValue in server['schemas'].items():
+					cnx.database = schemaName
+					# 存储过程导入
+					for procedureName,procedureValue in schemaValue['procedures'].items():
+						f = codecs.open(procedureValue,"r","utf-8")
 						ddl = f.read()
 						f.close()
-						Logger.info("procedure import [begin] %s" % (schema))
+						Logger.info("procedure import [begin] %s" % (procedureName))
 						for result in cursor.execute(ddl, multi=True):
 							if result.with_rows:
 								#Logger.info("Rows produced by statement
@@ -181,7 +202,38 @@ class MySqlHandle():
 								pass
 								#Logger.info("Number of rows affected by statement '{}':
 								#{}".format(result.statement, result.rowcount))
-						Logger.info("procedure import [end] %s" % (schema))
+						Logger.info("procedure import [end] %s" % (procedureName))
+					# 函数导入
+					for functionName,functionValue in schemaValue['functions'].items():
+						f = codecs.open(functionValue,"r","utf-8")
+						ddl = f.read()
+						f.close()
+						Logger.info("function import [begin] %s" % (functionName))
+						for result in cursor.execute(ddl, multi=True):
+							if result.with_rows:
+								#Logger.info("Rows produced by statement
+								#'{}':".format(result.statement))
+								Logger.info(result.fetchall())
+							else:
+								pass
+								#Logger.info("Number of rows affected by statement '{}':
+								#{}".format(result.statement, result.rowcount))
+						Logger.info("function import [end] %s" % (functionName))
+					#for procedure in procedures:
+					#	f = codecs.open(procedure,"r","utf-8")
+					#	ddl = f.read()
+					#	f.close()
+					#	Logger.info("procedure import [begin] %s" % (schema))
+					#	for result in cursor.execute(ddl, multi=True):
+					#		if result.with_rows:
+					#			#Logger.info("Rows produced by statement
+					#			#'{}':".format(result.statement))
+					#			Logger.info(result.fetchall())
+					#		else:
+					#			pass
+					#			#Logger.info("Number of rows affected by statement '{}':
+					#			#{}".format(result.statement, result.rowcount))
+					#	Logger.info("procedure import [end] %s" % (schema))
 				cursor.close()
 				Logger.info("cursor [close]")
 			except mysql.connector.Error as err:

@@ -2,12 +2,9 @@
 # from LogHandle import Logger
 import sys
 import getopt
-from MySqlHandle import MySqlHandle
+from MySQL.MySqlHandle import MySqlHandle
 
 if __name__ == "__main__":
-	# MySqlHandle.MySQLDumpProcedure()
-	# MySqlHandle.MySQLImportProcedure()
-	# MySqlHandle.MySqlDump()
 	opts, args = getopt.getopt(sys.argv[1:], "hi:o:")
 	for op, value in opts:
 		if op == "-i":
