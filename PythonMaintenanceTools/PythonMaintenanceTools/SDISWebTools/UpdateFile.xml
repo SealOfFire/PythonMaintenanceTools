@@ -1,0 +1,17 @@
+<UpdateiIle>
+  <from>D:\04_release</from>
+  <to>D:\mysql_dump</to>
+  <SDIS.Plat.BS.DAL>
+    <file>CMDS/ChartDAL.cs</file>
+    <file>CMDS/ChartDAL.cs</file>
+    <file>CMDS/ChartDAL.cs</file>
+  </SDIS.Plat.BS.DAL>
+  <SDIS.Plat.BS.Model>
+    <file>CMDS/ChartInfo.cs</file>
+    <file>CMDS/ChartInfo.cs</file>
+    <file>CMDS/ChartInfo.cs</file>
+  </SDIS.Plat.BS.Model>
+  <SDIS.Plat.Web>
+    <file>DashBoard\SinopecChart\CMDS_SinopecMaintenance.aspx.cs</file>
+  </SDIS.Plat.Web>
+</UpdateiIle>

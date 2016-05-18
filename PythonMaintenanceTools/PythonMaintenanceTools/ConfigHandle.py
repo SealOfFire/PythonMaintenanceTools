@@ -13,10 +13,15 @@ class ConfigHandle():
 	dumpInfo = {}
 	ImportInfo = {}
 
-	def __init__(self):
+	def __init__(self, filePath):
 		'''
 		构造函数
 		'''
+		# 判断配置文件是否存在
+		if(not os.path.exists(filePath)):
+			Logger.info('config file not exist!:{}'.format(filePath))
+		return
+
 		Logger.debug("ConfigHandle load config.xml")
 		self.tree = ET.parse('config.xml')
 		self.root = self.tree.getroot()

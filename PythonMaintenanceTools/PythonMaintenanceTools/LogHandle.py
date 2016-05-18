@@ -16,7 +16,7 @@ class Logger():
 	logging.getLogger('').addHandler(filehandler)
 
 	logger = logging.getLogger()
-	logger.debug("日志初始化完成")
+	logger.debug("log initialize finish")
 	
 	'''
 	@classmethod

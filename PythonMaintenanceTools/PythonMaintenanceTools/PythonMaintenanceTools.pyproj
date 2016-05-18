@@ -14,6 +14,10 @@
     <RootNamespace>PythonMaintenanceTools</RootNamespace>
     <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <CommandLineArguments>
+    </CommandLineArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +38,19 @@
     <Compile Include="MySQL\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SDISWebTools\module1.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SDISWebTools\UpdateFile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SDISWebTools\__init__.py" />
+    <Compile Include="SSH\module1.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SSH\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="test1.py" />
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +58,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.xml" />
+    <Content Include="MySQL\MySQLConfig.xml" />
+    <Content Include="SDISWebTools\UpdateFile.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MySQL\" />
+    <Folder Include="SDISWebTools\" />
+    <Folder Include="SSH\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,11 +1,11 @@
 <config>
   <!-- 导出数据设置 -->
   <DumpInfo home="d:/mysql_dump">
-    <server  host="localhost" username="root" password="root" port="3306">
-      <schema name="schema">
+    <server  host="host" username="root" password="root" port="3306">
+      <schema name="schema1">
         <procedures>
           <procedure>DFI_ReportIndicator_UpdateOne</procedure>
-          <!--<procedure>EMB_Equipment_AddOne</procedure>
+          <procedure>EMB_Equipment_AddOne</procedure>
           <procedure>EMB_Equipment_UpdateOne</procedure>
           <procedure>EMB_Equipment_ImportOne</procedure>
           <procedure>CMDS_SinopecInspection_GetHistogramByPurpose</procedure>
@@ -16,20 +16,20 @@
           <procedure>CMDS_SinopecMaintenance_GetAllHistogram</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetHistogramByPurpose</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetEquipmentTotal2</procedure>
-          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>-->
+          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>
         </procedures>
         <functions>
-          <!--<function>AssignApplicationRuleValue</function>
+          <function>AssignApplicationRuleValue</function>
           <function>CalculateAllRuleValueByApplicationID</function>
-          <function>DFI_GetInspectionItemSchema</function>-->
+          <function>DFI_GetInspectionItemSchema</function>
         </functions>
       </schema>
     </server>
-    <server  host="localhost" username="root" password="root" port="3306">
-      <schema name="schema">
+    <server  host="host" username="root" password="root" port="33061">
+      <schema name="schema2">
         <procedures>
           <procedure>DFI_ReportIndicator_UpdateOne</procedure>
-          <!--<procedure>EMB_Equipment_AddOne</procedure>
+          <procedure>EMB_Equipment_AddOne</procedure>
           <procedure>EMB_Equipment_UpdateOne</procedure>
           <procedure>EMB_Equipment_ImportOne</procedure>
           <procedure>CMDS_SinopecInspection_GetHistogramByPurpose</procedure>
@@ -40,18 +40,18 @@
           <procedure>CMDS_SinopecMaintenance_GetAllHistogram</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetHistogramByPurpose</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetEquipmentTotal2</procedure>
-          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>-->
+          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>
         </procedures>
         <functions>
-          <!--<function>AssignApplicationRuleValue</function>
+          <function>AssignApplicationRuleValue</function>
           <function>CalculateAllRuleValueByApplicationID</function>
-          <function>DFI_GetInspectionItemSchema</function>-->
+          <function>DFI_GetInspectionItemSchema</function>
         </functions>
       </schema>
-      <schema name="schema">
+      <schema name="schema3">
         <procedures>
           <procedure>DFI_ReportIndicator_UpdateOne</procedure>
-          <!--<procedure>EMB_Equipment_AddOne</procedure>
+          <procedure>EMB_Equipment_AddOne</procedure>
           <procedure>EMB_Equipment_UpdateOne</procedure>
           <procedure>EMB_Equipment_ImportOne</procedure>
           <procedure>CMDS_SinopecInspection_GetHistogramByPurpose</procedure>
@@ -62,12 +62,12 @@
           <procedure>CMDS_SinopecMaintenance_GetAllHistogram</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetHistogramByPurpose</procedure>
           <procedure>CMDS_SinopecEquipmentRepair_GetEquipmentTotal2</procedure>
-          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>-->
+          <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>
         </procedures>
         <functions>
-          <!--<function>AssignApplicationRuleValue</function>
+          <function>AssignApplicationRuleValue</function>
           <function>CalculateAllRuleValueByApplicationID</function>
-          <function>DFI_GetInspectionItemSchema</function>-->
+          <function>DFI_GetInspectionItemSchema</function>
         </functions>
       </schema>
     </server>
@@ -75,10 +75,10 @@
 
   <!-- 导入数据设置 -->
   <ImportInfo>
-    <from>D:\mysql_dump\</from>
+    <from>D:\mysql_dump\localhost\schema\</from>
     <to>
       <server  host="localhost" username="root" password="root" port="3306">
-        <schema name="schema">
+        <schema name="schema1">
           <procedures>
             <procedure>CMDS_SinopecInspection_GetHistogramByPurpose</procedure>
             <procedure>CMDS_SinopecInspection_GetEquipmentTotal2</procedure>
@@ -91,15 +91,14 @@
             <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>
           </procedures>
           <functions>
-            <!--<function>AssignApplicationRuleValue</function>
+            <function>AssignApplicationRuleValue</function>
             <function>CalculateAllRuleValueByApplicationID</function>
-            <function>DFI_GetInspectionItemSchema</function>-->
+            <function>DFI_GetInspectionItemSchema</function>
           </functions>
         </schema>
       </server>
-      <!--<server  host="123.56.104.86" username="root" password="root" port="3306">-->
-      <server  host="localhost" username="root" password="root" port="3306">
-        <schema name="schema">
+      <server  host="localhost2" username="root" password="root" port="3306">
+        <schema name="schema2">
           <procedures>
             <procedure>CMDS_SinopecInspection_GetHistogramByPurpose</procedure>
             <procedure>CMDS_SinopecInspection_GetEquipmentTotal2</procedure>
@@ -112,9 +111,9 @@
             <procedure>CMDS_SinopecEquipmentRepair_GetAllHistogram</procedure>
           </procedures>
           <functions>
-            <!--<function>AssignApplicationRuleValue</function>
+            <function>AssignApplicationRuleValue</function>
             <function>CalculateAllRuleValueByApplicationID</function>
-            <function>DFI_GetInspectionItemSchema</function>-->
+            <function>DFI_GetInspectionItemSchema</function>
           </functions>
         </schema>
       </server>
